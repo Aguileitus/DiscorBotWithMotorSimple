@@ -2,13 +2,12 @@
 
 import logging
 
-#import discord
 from discord.ext import commands
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from settings import Auth
 
-class AguiBot(commands.AutoShardedBot):
+class Bot(commands.AutoShardedBot):
     """Main Bot class"""
 
     DESC = "An example bot to interact with Motor"
@@ -26,7 +25,7 @@ class AguiBot(commands.AutoShardedBot):
             try:
                 self.load_extension(extension)
                 print(f"Loaded {extension}")
-            except Exception as ex: # pylint: disable=broad-except
+            except commands.errors.ExtensionNotFound as ex:
                 exc = f'{type(ex).__name__}: {ex}'
                 print(f'Failed to load extension {extension}\n{exc}')
 
@@ -44,5 +43,5 @@ class AguiBot(commands.AutoShardedBot):
         await self.process_commands(message)  # Without this, no @commands.command will be invoked.
 
 if __name__ == "__main__":
-    agui_bot = AguiBot()
-    agui_bot.run(Auth.TOKEN)
+    agui = Bot()
+    agui.run(Auth.TOKEN)
